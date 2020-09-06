@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 void main(){
   runApp(
      MaterialApp(
@@ -12,12 +13,3 @@ void main(){
   );
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: Text('hey',style: TextStyle(color: Colors.white),),
-    );
-  }
-}
