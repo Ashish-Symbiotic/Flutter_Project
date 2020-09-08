@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
+//my own imports
+import 'package:ecomm/components/horizontal_listview.dart';
+
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -128,7 +131,8 @@ class _HomePageState extends State<HomePage> {
             child: new Text('Categories'),
           ),
 
-          //horizontal listview
+          //horizontal listview begins here
+          HorizontalListView(),
         ],
       ),
     );

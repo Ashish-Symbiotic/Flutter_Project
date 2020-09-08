@@ -56,6 +56,12 @@ flutter:
       - images/i8.jpg
       - images/i14.jpg
       - images/i12.jpg
+      - images/icons/shirt.png
+      - images/icons/formal.png
+      - images/icons/gym-shoes.png
+      - images/icons/trousers.png
+      - images/icons/shoes.png
+      
     
 
 
