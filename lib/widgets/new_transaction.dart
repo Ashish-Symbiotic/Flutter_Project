@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
 
-class NewTransaction extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
+class NewTransaction extends StatefulWidget {
   final Function addAmount;
 
   NewTransaction(this.addAmount);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
+
+  void submitData() {
+    final enteredTitle = titleController.text;
+    final enteredAmount = double.parse(amountController.text);
+
+    if (enteredAmount <= 0 || enteredTitle.isEmpty) {
+      return;
+    }
+
+    widget.addAmount(enteredTitle, enteredAmount);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,6 +38,7 @@ class NewTransaction extends StatelessWidget {
             TextField(
               autocorrect: true,
               decoration: InputDecoration(labelText: 'Title'),
+
               /*onChanged: (value) {
                         titleInput = value;
                       },*/
@@ -26,18 +46,17 @@ class NewTransaction extends StatelessWidget {
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Price'),
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => submitData(),
               /* onChanged: (value) {
                         amountInput = value;
                       },*/
               controller: amountController,
             ),
             FlatButton(
-              onPressed: () {
-                addAmount(
-                    titleController.text, double.parse(amountController.text));
-              },
+              onPressed: submitData,
               child: Text("Add Transaction"),
-              textColor: Colors.red,
+              textColor: Colors.red[300],
             )
           ],
         ),
