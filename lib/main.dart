@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
         date: DateTime.now()),*/
   ];
 
+  bool _showChart = false;
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((element) {
       return element.date.isAfter(
@@ -87,34 +88,72 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final appBar = AppBar(
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => {
+                  _startAddNewTransaction(context),
+                })
+      ],
+      title: Text("Personal Expense"),
+    );
+    final textWidget = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          1,
+      child: TransactionList(
+          transactions: _userTransactions, deleteTx: _deleteTransaction),
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => {
-                    _startAddNewTransaction(context),
-                  })
-        ],
-        title: Text("Personal Expense"),
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(25)),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  ),
+                ],
               ),
-              width: double.infinity,
-              child: Card(
-                child: Chart(_recentTransactions),
-                elevation: 5,
+            if (!isLandscape)
+              Container(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.2,
+                child: Card(
+                  child: Chart(_recentTransactions),
+                ),
               ),
-            ),
-            TransactionList(
-                transactions: _userTransactions, deleteTx: _deleteTransaction),
+            if (!isLandscape) textWidget,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.5,
+                      child: Card(
+                        child: Chart(_recentTransactions),
+                      ))
+                  : textWidget,
           ],
         ),
       ),
